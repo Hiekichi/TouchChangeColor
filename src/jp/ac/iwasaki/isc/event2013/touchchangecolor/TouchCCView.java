@@ -46,6 +46,7 @@ public class TouchCCView extends SurfaceView implements SurfaceHolder.Callback {
 		mTargetOneColor = mRandom.nextInt(180) + 50;
 		mTargetColor = makeColor( mChoiceColor, (int)mTargetOneColor );
 		mPlayerOneColor[0] = mPlayerOneColor[1] = 255.0f;
+		mPlayerColor[0] = mPlayerColor[1] = 0;
 		mGameStatus = 0;
 		printMessage("この色になるように画面を上下にスワイプしてください\nタッチで開始します");
 	}
@@ -156,9 +157,11 @@ public class TouchCCView extends SurfaceView implements SurfaceHolder.Callback {
 		if (event.getAction() == MotionEvent.ACTION_DOWN) {
 			if (mGameStatus == 1) {
 				mGameStatus = 2;
+				mTapPointY = 0;
 			}
 			if (mGameStatus == 3) {
 				mGameStatus = 4;
+				mTapPointY = 0;
 			}
 		}
 		else if(event.getAction() == MotionEvent.ACTION_MOVE) {
