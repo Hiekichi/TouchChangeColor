@@ -2,7 +2,6 @@ package com.hiekichi.touchchangecolor;
 
 import java.util.Random;
 
-import android.R;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -52,7 +51,7 @@ public class TouchCCView extends SurfaceView implements SurfaceHolder.Callback {
 		mPlayerSecondColor[0] = mPlayerSecondColor[1] = 255.0f;
 		mPlayerColor[0] = mPlayerColor[1] = 0;
 		mGameStatus = 0;
-		printMessage( "この色になるように画面を上下にスワイプしてください\nタッチで開始します" );
+		printMessage( "この色になるように画面を上下左右にスワイプしてください\nタッチで開始します" );
 	}
 	
 	private int makeColor(int choice, int value1, int value2) {
