@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">TouchChangeColor</string>
+    <string name="message_gamestart">この色になるように画面を上下にスワイプしてください\nタッチで開始します</string>
+    <string name="message_setupfirstplayer"></string>
+    <string name="message_setupnextplayer"></string>
+    <string name="message_gameend"></string>
 </resources>

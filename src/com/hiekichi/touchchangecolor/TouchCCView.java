@@ -1,7 +1,8 @@
-package jp.ac.iwasaki.isc.event2013.touchchangecolor;
+package com.hiekichi.touchchangecolor;
 
 import java.util.Random;
 
+import android.R;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -14,7 +15,7 @@ import android.widget.Toast;
 
 public class TouchCCView extends SurfaceView implements SurfaceHolder.Callback {
 
-	int mGameStatus; // ゲームの状態  （0:ゲーム開始前、1:プレイヤー0(1人目)の開始前、2:プレイヤー1(2人目)の開始前
+	int mGameStatus; // ゲームの状態  （0:ゲーム開始前、1:プレイヤー0(1人目)の開始前、2:プレイヤー1(2人目)の開始前 enum使えよ
 	
 	int mBan = 0; // 0:先攻  1:後攻
 	int mChoiceColor; // RGBのどの1色以外を変化させるか。ランダムで選ばれる   0:R, 1:G, 2:B
@@ -24,8 +25,7 @@ public class TouchCCView extends SurfaceView implements SurfaceHolder.Callback {
 	float[] mPlayerFirstColor  = new float[2]; // プレイヤーがぐりぐりして増えていく値
 	float[] mPlayerSecondColor = new float[2]; // プレイヤーがぐりぐりして増えていく値
 	int[] mPlayerColor = new int[2]; // プレイヤーが選んだ色
-	float mTapPointY;
-	
+	float mTapPointX, mTapPointY;
 	
 	private SurfaceHolder	mHolder;  // サーフェイスホルダー
 	Paint mPaint = new Paint();  // ペイントインスタンス
@@ -52,7 +52,7 @@ public class TouchCCView extends SurfaceView implements SurfaceHolder.Callback {
 		mPlayerSecondColor[0] = mPlayerSecondColor[1] = 255.0f;
 		mPlayerColor[0] = mPlayerColor[1] = 0;
 		mGameStatus = 0;
-		printMessage("この色になるように画面を上下にスワイプしてください\nタッチで開始します");
+		printMessage( "この色になるように画面を上下にスワイプしてください\nタッチで開始します" );
 	}
 	
 	private int makeColor(int choice, int value1, int value2) {
@@ -106,7 +106,7 @@ public class TouchCCView extends SurfaceView implements SurfaceHolder.Callback {
 			canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), mPaint);			
 		}
 		else if (mGameStatus == 2 || mGameStatus == 4) {
-			mPlayerFirstColor[mBan] = (int)( 255 * (mTapPointY / canvas.getHeight()) );
+			mPlayerFirstColor[mBan] = (int)( 255 * (mTapPointX / canvas.getHeight()) );
 			mPlayerSecondColor[mBan] = (int)( 255 * (mTapPointY / canvas.getWidth()) );
 			mPlayerColor[mBan] = makeColor( mChoiceColor, (int)mPlayerFirstColor[mBan], (int)mPlayerSecondColor[mBan] );
 			mPaint.setColor( mPlayerColor[mBan] );
@@ -171,6 +171,7 @@ public class TouchCCView extends SurfaceView implements SurfaceHolder.Callback {
 		}
 		else if(event.getAction() == MotionEvent.ACTION_MOVE) {
 			if (mGameStatus == 2 || mGameStatus == 4) {
+				mTapPointX = event.getX();
 				mTapPointY = event.getY();
 				repaint(getHolder()); // 再描画を指示
 			}

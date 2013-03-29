@@ -1,4 +1,4 @@
-package jp.ac.iwasaki.isc.event2013.touchchangecolor;
+package com.hiekichi.touchchangecolor;
 
 import android.app.Activity;
 import android.content.res.Configuration;
