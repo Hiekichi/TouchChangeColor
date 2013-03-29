@@ -17,10 +17,12 @@ public class TouchCCView extends SurfaceView implements SurfaceHolder.Callback {
 	int mGameStatus; // ゲームの状態  （0:ゲーム開始前、1:プレイヤー0(1人目)の開始前、2:プレイヤー1(2人目)の開始前
 	
 	int mBan = 0; // 0:先攻  1:後攻
-	int mChoiceColor; // RGBのどの1色を変化させるか。ランダムで選ばれる   0:R, 1:G, 2:B
-	float mTargetOneColor; // 目標とする色の成分1つ（赤か緑か青か）
+	int mChoiceColor; // RGBのどの1色以外を変化させるか。ランダムで選ばれる   0:R, 1:G, 2:B
+	float mTargetFirstColor;  // 目標とする色の成分1つ目（赤か緑か青か）
+	float mTargetSecondColor; // 目標とする色の成分2つ目（赤か緑か青か）
 	int mTargetColor; // 目標とする色
-	float[] mPlayerOneColor = new float[2]; // プレイヤーがぐりぐりして増えていく値
+	float[] mPlayerFirstColor  = new float[2]; // プレイヤーがぐりぐりして増えていく値
+	float[] mPlayerSecondColor = new float[2]; // プレイヤーがぐりぐりして増えていく値
 	int[] mPlayerColor = new int[2]; // プレイヤーが選んだ色
 	float mTapPointY;
 	
@@ -43,26 +45,28 @@ public class TouchCCView extends SurfaceView implements SurfaceHolder.Callback {
 	
 	private void initGame() {
 		mChoiceColor = mRandom.nextInt(3);
-		mTargetOneColor = mRandom.nextInt(180) + 50;
-		mTargetColor = makeColor( mChoiceColor, (int)mTargetOneColor );
-		mPlayerOneColor[0] = mPlayerOneColor[1] = 255.0f;
+		mTargetFirstColor  = mRandom.nextInt(180) + 50;
+		mTargetSecondColor = mRandom.nextInt(180) + 50;
+		mTargetColor = makeColor( mChoiceColor, (int)mTargetFirstColor, (int)mTargetSecondColor );
+		mPlayerFirstColor[0]  = mPlayerFirstColor[1]  = 255.0f;
+		mPlayerSecondColor[0] = mPlayerSecondColor[1] = 255.0f;
 		mPlayerColor[0] = mPlayerColor[1] = 0;
 		mGameStatus = 0;
 		printMessage("この色になるように画面を上下にスワイプしてください\nタッチで開始します");
 	}
 	
-	private int makeColor(int choice, int value) {
+	private int makeColor(int choice, int value1, int value2) {
 		int returnColor = 0;
 		
 		switch (choice) {
 		case 0:
-			returnColor = Color.rgb(value, 0, 0);
+			returnColor = Color.rgb(0, value1, value2);
 			break;
 		case 1:
-			returnColor = Color.rgb(0, value, 0);
+			returnColor = Color.rgb(value1, 0, value2);
 			break;
 		case 2:
-			returnColor = Color.rgb(0, 0, value);
+			returnColor = Color.rgb(value1, value2, 0);
 			break;
 		}
 		return returnColor;
@@ -102,8 +106,9 @@ public class TouchCCView extends SurfaceView implements SurfaceHolder.Callback {
 			canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), mPaint);			
 		}
 		else if (mGameStatus == 2 || mGameStatus == 4) {
-			mPlayerOneColor[mBan] = (int)( 255 * (mTapPointY / canvas.getHeight()) );
-			mPlayerColor[mBan] = makeColor( mChoiceColor, (int)mPlayerOneColor[mBan] );
+			mPlayerFirstColor[mBan] = (int)( 255 * (mTapPointY / canvas.getHeight()) );
+			mPlayerSecondColor[mBan] = (int)( 255 * (mTapPointY / canvas.getWidth()) );
+			mPlayerColor[mBan] = makeColor( mChoiceColor, (int)mPlayerFirstColor[mBan], (int)mPlayerSecondColor[mBan] );
 			mPaint.setColor( mPlayerColor[mBan] );
 			canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), mPaint);
 			//mPaint.setColor( Color.YELLOW );
